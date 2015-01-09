@@ -1,0 +1,10 @@
+config:
+  default_match: lobby1
+matches:
+  lobby1:
+    type: Lobby
+    name: '&6&oLobby'
+    teams: ['&aTop 6 &ePlayers']
+    players_on_scoreboard: 6
+    
+  
