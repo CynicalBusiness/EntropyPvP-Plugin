@@ -5,6 +5,8 @@ matches:
     type: Lobby
     name: '&6&oLobby'
     teams: ['&aTop 6 &ePlayers']
+    team_size: -1
     players_on_scoreboard: 6
+    
     
   
