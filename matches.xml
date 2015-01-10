@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<matches default="lobby1">
+    <!-- The default match is the match players will be placed in upon joining.
+    	 If the match here is invalid, the first match on this list is used. -->
+    <match name="lobby1" type="Lobby">
+        <meta color="GOLD" display_name="Lobby"/>
+        <data enabled="true" start_delay="0" restart_timer="0"/>
+        	<!-- A zero in restart_timer indicates the match will not restart. -->
+        <teams players_on_scoreboard="6" players_per_team="0">
+            <!-- Zero players per team will make the team's size the max number of players for the server. -->
+            <team name="in_lobby" color="WHITE" display_name="Players in Lobby"/>
+        </teams>
+    </match>
+    <match name="tdm1" type="MatchTDM">
+        <meta color="RED" display_name="TDM: Room 1"/>
+        <data enabled="true" start_delay="10" restart_timer="240"/>
+        <teams players_on_scoreboard="6" players_per_team="0">
+            <team name="red" color="RED" display_name="Red Team"/>
+            <team name="blue" color="BLUE" display_name="Blue Team"/>
+        </teams>
+    </match>
+</matches>

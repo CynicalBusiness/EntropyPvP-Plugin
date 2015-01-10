@@ -1,30 +1,47 @@
 package me.capit.entropypvp.match;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.capit.entropypvp.EntropyPvP;
 import me.capit.entropypvp.exception.MatchNotJoinableException;
 import me.capit.entropypvp.exception.TeamNotJoinableException;
+import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.entity.Player;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 
 public abstract class Match{
+	protected final boolean enabled;
 	protected final Team[] teams;
 	protected final EntropyPvP plugin;
-	protected final String name;
-	protected final int delay, restart;
+	protected final String name,displayName;
+	protected final ChatColor color;
+	protected final int delay, restart, playersPerTeam, playersOnScoreboard;
 	
-	public Match(EntropyPvP plugin, List<String> teams, int teamSize, String name,
-			int startupDelay, int restartTimer){
-		this.plugin = plugin; this.name = name;
+	public Match(EntropyPvP plugin, Element element) throws JDOMException, IllegalArgumentException, NullPointerException {
+		this.plugin = plugin; 
 		
-		this.teams = new Team[teams.size()];
-		for (int i=0; i<teams.size(); i++){
-			this.teams[i] = new Team(teams.get(i), teamSize>=0 ? teamSize : plugin.getServer().getMaxPlayers());
-		}
+		if (element.getAttribute("name")==null) throw new IllegalArgumentException("Match does not specify a name.");
+		name = element.getAttributeValue("name");
 		
-		delay = startupDelay;
-		restart = restartTimer;
+		Element meta = element.getChild("meta");
+			displayName = meta.getAttributeValue("display_name");
+			color = ChatColor.valueOf(meta.getAttributeValue("color"));
+		
+		Element data = element.getChild("data");
+			enabled = Boolean.parseBoolean(data.getAttributeValue("enabled"));
+			delay = Integer.parseInt(data.getAttributeValue("start_delay"));
+			restart = Integer.parseInt(data.getAttributeValue("restart_timer"));
+		
+		Element teams = element.getChild("teams");
+			playersPerTeam = Integer.parseInt(teams.getAttributeValue("players_per_team"));
+			playersOnScoreboard = Integer.parseInt(teams.getAttributeValue("players_on_scoreboard"));
+			this.teams = new Team[teams.getChildren().size()];
+			for (int i=0; i<this.teams.length; i++){
+				this.teams[i] = new Team(plugin, playersPerTeam, teams.getChildren().get(i));
+			}
 	}
 	
 	public final boolean isActive(){
@@ -34,7 +51,9 @@ public abstract class Match{
 		return !isFull();
 	}
 	
-	public abstract String getDisplayName();
+	public final String getDisplayName(){
+		return color+displayName;
+	}
 	public final String getName(){
 		return name;
 	}
@@ -93,5 +112,6 @@ public abstract class Match{
 	
 	public List<String> getScoreboardText(){
 		
+		return new ArrayList<String>(); // TODO
 	}
 }

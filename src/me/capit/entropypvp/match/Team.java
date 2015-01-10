@@ -1,16 +1,23 @@
 package me.capit.entropypvp.match;
 
+import me.capit.entropypvp.EntropyPvP;
 import me.capit.entropypvp.exception.TeamNotJoinableException;
+import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.entity.Player;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 
 public class Team {
 	private final Player[] players;
-	private final String name;
+	private final String name,displayName;
+	private final ChatColor color;
 	
-	public Team(String name, int size){
+	public Team(EntropyPvP plugin, int size, Element element) throws JDOMException, IllegalArgumentException, NullPointerException{
 		players = new Player[size];
-		this.name = name;
+		name = element.getAttributeValue("name");
+		color = ChatColor.valueOf(element.getAttributeValue("color"));
+		displayName = element.getAttributeValue("display_name");
 	}
 	
 	public int size(){
@@ -19,6 +26,10 @@ public class Team {
 	
 	public String getName(){
 		return name;
+	}
+	
+	public String getDisplayName(){
+		return color+displayName;
 	}
 	
 	public final int getFirstEmptySlot(){
